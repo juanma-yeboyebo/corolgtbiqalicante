@@ -1,0 +1,29 @@
+/* Estilos adicionales para descargas */
+.btn-download {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 8px;
+    padding: 8px 16px;
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-download:hover {
+    background: #764ba2;
+}
+
+.partitura-item,
+.guion-item {
+    margin-bottom: 30px;
+}
+
+.partitura-item h4,
+.guion-item h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
