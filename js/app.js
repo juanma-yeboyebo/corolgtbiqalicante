@@ -73,16 +73,31 @@ function cambiarPestana(nombre) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.id === `${nombre}-tab`));
 }
 
-function abrirPantallaCompleta(url) {
+async function abrirPantallaCompleta(url) {
+    const hoja = crear('div', { className: 'pdf-paginas' }, [crear('p', { className: 'pdf-cargando', textContent: 'Cargando…' })]);
     const capa = crear('div', { className: 'pdf-fullscreen' });
     const cerrar = () => { capa.remove(); document.removeEventListener('keydown', alPulsar); };
     const alPulsar = e => { if (e.key === 'Escape') cerrar(); };
-    capa.append(
-        crear('button', { className: 'pdf-fullscreen-close', textContent: '✕', onclick: cerrar }),
-        crear('iframe', { className: 'pdf-fullscreen-viewer', src: url })
-    );
+    capa.append(crear('button', { className: 'pdf-fullscreen-close', textContent: '✕', onclick: cerrar }), hoja);
     document.addEventListener('keydown', alPulsar);
     document.body.append(capa);
+
+    try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdf = await pdfjsLib.getDocument(url).promise;
+        const ancho = hoja.clientWidth;
+        hoja.replaceChildren();
+        for (let i = 1; i <= pdf.numPages && capa.isConnected; i++) {
+            const pagina = await pdf.getPage(i);
+            const escala = ancho / pagina.getViewport({ scale: 1 }).width;
+            const vista = pagina.getViewport({ scale: escala * window.devicePixelRatio });
+            const lienzo = crear('canvas', { width: vista.width, height: vista.height });
+            hoja.append(lienzo);
+            await pagina.render({ canvasContext: lienzo.getContext('2d'), viewport: vista }).promise;
+        }
+    } catch {
+        hoja.replaceChildren(crear('iframe', { className: 'pdf-fullscreen-viewer', src: url }));
+    }
 }
 
 function elementoArchivo(cancion, campo, fichero) {
@@ -131,15 +146,8 @@ async function alEnviarLogin(e) {
     }
 }
 
-function cerrarSesion() {
-    if (!confirm('¿Seguro que quieres cerrar sesión?')) return;
-    sessionStorage.removeItem(CLAVE_SESION);
-    mostrarLogin();
-}
-
 function iniciar() {
     document.getElementById('loginForm').addEventListener('submit', alEnviarLogin);
-    document.getElementById('logoutBtn').addEventListener('click', cerrarSesion);
     document.getElementById('searchInput').addEventListener('input', e => {
         const texto = e.target.value.toLowerCase();
         pintarCanciones(CANCIONES.filter(c => c.nombre.toLowerCase().includes(texto)));
