@@ -2,21 +2,9 @@ const HASH_CONTRASENA =
   "2947d73cebda89071e9846cdca207323a4cafe3a1dda12024b2c08482f720bb0";
 const CLAVE_SESION = "coroSesion";
 const TIPOS = [
-  {
-    campo: "letras",
-    contenedor: "guionContainer",
-    vacio: "No hay letras disponibles",
-  },
-  {
-    campo: "audios",
-    contenedor: "audioContainer",
-    vacio: "No hay audios disponibles",
-  },
-  {
-    campo: "partituras",
-    contenedor: "partituraContainer",
-    vacio: "No hay partituras disponibles",
-  },
+  { campo: "letras", pestana: "guion", contenedor: "guionContainer" },
+  { campo: "audios", pestana: "audio", contenedor: "audioContainer" },
+  { campo: "partituras", pestana: "partitura", contenedor: "partituraContainer" },
 ];
 
 const ICONOS = {
@@ -112,15 +100,17 @@ function pintarCanciones(lista) {
         [
           crear("div", { className: "song-card-info" }, [
             crear("h3", { textContent: cancion.nombre }),
-            crear("div", { className: "badges" }, [
-              insignia("letra", "Letras", cancion.letras?.length || 0),
-              insignia("audio", "Audios", cancion.audios?.length || 0),
-              insignia(
-                "partitura",
-                "Partituras",
-                cancion.partituras?.length || 0,
-              ),
-            ]),
+            crear(
+              "div",
+              { className: "badges" },
+              [
+                ["letra", "Letras", cancion.letras?.length || 0],
+                ["audio", "Audios", cancion.audios?.length || 0],
+                ["partitura", "Partituras", cancion.partituras?.length || 0],
+              ]
+                .filter(([, , n]) => n > 0)
+                .map(([nombre, titulo, n]) => insignia(nombre, titulo, n)),
+            ),
           ]),
           icono("flecha"),
         ],
@@ -234,22 +224,23 @@ function elementoArchivo(cancion, campo, fichero) {
 
 function abrirCancion(cancion) {
   document.getElementById("modalSongTitle").textContent = cancion.nombre;
+  let primera = null;
   for (const tipo of TIPOS) {
-    const contenedor = document.getElementById(tipo.contenedor);
     const ficheros = cancion[tipo.campo] || [];
-    contenedor.replaceChildren(
-      ...(ficheros.length
-        ? ficheros.map((f) =>
-            crear(
-              "div",
-              { className: "archivo" },
-              elementoArchivo(cancion, tipo.campo, f),
-            ),
-          )
-        : [crear("p", { className: "vacio", textContent: tipo.vacio })]),
+    document.querySelector(`[data-tab="${tipo.pestana}"]`).hidden =
+      ficheros.length === 0;
+    if (ficheros.length && !primera) primera = tipo.pestana;
+    document.getElementById(tipo.contenedor).replaceChildren(
+      ...ficheros.map((f) =>
+        crear(
+          "div",
+          { className: "archivo" },
+          elementoArchivo(cancion, tipo.campo, f),
+        ),
+      ),
     );
   }
-  cambiarPestana("guion");
+  cambiarPestana(primera);
   document.getElementById("songModal").style.display = "flex";
 }
 
