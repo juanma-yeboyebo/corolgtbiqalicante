@@ -263,6 +263,11 @@ async function alEnviarLogin(e) {
   const input = document.getElementById("password");
   if ((await sha256(input.value)) === HASH_CONTRASENA) {
     sessionStorage.setItem(CLAVE_SESION, "1");
+    if (window.PasswordCredential) {
+      navigator.credentials
+        .store(new PasswordCredential(e.target))
+        .catch(() => {});
+    }
     input.value = "";
     mostrarApp();
   } else {
