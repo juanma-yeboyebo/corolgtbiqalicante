@@ -24,7 +24,7 @@ const CANCIONES = [
   {
     nombre: "Me muero por besarte",
     carpeta: "Me muero por besarte",
-    letras: [],
+    letras: ["Me muero por besarte Letra.pdf"],
     audios: [
       "Me muero por besarte Contralto y Bajo.mp3",
       "Me muero por besarte Soprano.mp3",
