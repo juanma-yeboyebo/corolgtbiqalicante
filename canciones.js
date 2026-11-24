@@ -21,14 +21,7 @@ const CANCIONES = [
     ],
     partituras: ["Happy Xmas PARTITURA.pdf"],
   },
-  //   {
-  //     nombre: "Pruebas",
-  //     carpeta: "Pruebas",
-  //     letras: [],
-  //     audios: [],
-  //     partituras: ["Happy Xmas PARTITURA.pdf"],
-  //   },
-{
+  {
     nombre: "Me muero por besarte",
     carpeta: "Me muero por besarte",
     letras: ["Me muero por besarte LETRA.pdf"],
@@ -39,4 +32,12 @@ const CANCIONES = [
     ],
     partituras: ["Me muero por besarte PARTITURA.pdf"],
   },
+  //   {
+  //     nombre: "Pruebas",
+  //     carpeta: "Pruebas",
+  //     letras: [],
+  //     audios: [],
+  //     partituras: ["Happy Xmas PARTITURA.pdf"],
+  //   },
+
 ];
