@@ -30,7 +30,7 @@ const CANCIONES = [
       "Me muero por besarte Soprano.mp3",
       "Me muero por besarte Tenor.mp3",
     ],
-    partituras: ["Me muero por besarte PARTITURA.pdf"],
+    partituras: ["Me muero por besarte Partitura.pdf"],
   },
   //   {
   //     nombre: "Pruebas",
