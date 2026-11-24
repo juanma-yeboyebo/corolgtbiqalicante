@@ -22,6 +22,13 @@ const CANCIONES = [
     partituras: ["Happy Xmas PARTITURA.pdf"],
   },
   {
+    nombre: "La Perla",
+    carpeta: "La Perla",
+    letras: ["La Perla LETRA GUIÓN.pdf"],
+    audios: [],
+    partituras: [],
+  },
+  {
     nombre: "Me muero por besarte",
     carpeta: "Me muero por besarte",
     letras: ["Me muero por besarte Letra.pdf"],
